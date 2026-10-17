@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y", "import", "vitest"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2024": true
+  },
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/react-in-jsx-scope": "off",
+    "nextjs/no-html-link-for-pages": "error",
+    "nextjs/no-sync-scripts": "error",
+    "typescript/no-explicit-any": "warn",
+    "typescript/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    // role="status"/"progressbar" on styled divs is intentional; <output>/<progress> don't fit the UI.
+    "jsx-a11y/prefer-tag-over-role": "off",
+    // Label text is rendered from data, which the rule can't see.
+    "jsx-a11y/label-has-associated-control": "off",
+    // Parent gate focuses its PIN input on open by design.
+    "jsx-a11y/no-autofocus": "off",
+    "unicorn/consistent-function-scoping": "off",
+    // Side-effect CSS imports (pages/_app.tsx).
+    "import/no-unassigned-import": "off"
+  },
+  "overrides": [
+    {
+      "files": ["tests/**"],
+      "rules": {
+        "vitest/require-mock-type-parameters": "off",
+        // Throwing generators are used to simulate model failures.
+        "require-yield": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"]
+}
