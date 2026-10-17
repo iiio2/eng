@@ -1,17 +1,17 @@
 # English Buddy — AI English learning chatbot for children (under 7)
 
-Next.js (Pages Router) + LangChain.js backend for a child-safe English tutor that
-teaches progressively (L1 → L3), detects the child's mode and mood, supports
-social-emotional learning, and replies in under 2 seconds.
+A child-safe English tutor application that teaches progressively (Level 1 → Level 3), detects the child’s learning mode and mood, supports social-emotional learning, and responds within 2 seconds.
 
 ## Getting started
 
 ```bash
-cp .env.example .env   # add your OPENAI_API_KEY
-pnpm install
-pnpm dev               # http://localhost:3000
-pnpm test              # unit + engine tests (no network needed)
-pnpm typecheck && pnpm lint
+pnpm i
+```
+
+Next, copy the `.env.example` to `.env` and fill the environment variable
+
+```bash
+pnpm dev
 ```
 
 ## Frontend
