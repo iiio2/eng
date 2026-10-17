@@ -14,6 +14,28 @@ pnpm test              # unit + engine tests (no network needed)
 pnpm typecheck && pnpm lint
 ```
 
+## Frontend
+
+| Screen | Who it's for | What it does |
+| --- | --- | --- |
+| `/` setup | Parent | Collects a first name, age and starting level, then creates the profile |
+| `/` chat | Child | Voice-first chat with Pip ([components/chat/](components/chat/)) |
+| `/parent` | Parent | A "grown-ups only" question, then progress, moods, interests, safety alerts, the transcript and deletion ([components/parent/](components/parent/)) |
+
+How the chat works for a child under 7:
+- **Voice first.** Pip reads replies aloud sentence by sentence while they stream ([lib/client/speech.ts](lib/client/speech.ts)). A big mic button sends speech without typing; it uses the Web Speech API, so Chrome, Edge and Safari support it. Typing is the fallback everywhere else.
+  - iOS only allows speech after a tap, so every tap that can lead to speech first speaks a silent utterance ([hooks/useSpeechSynthesis.ts](hooks/useSpeechSynthesis.ts)).
+  - Tapping a button while the mic is recording discards the recording, so it can't interrupt the next reply.
+  - Errors are spoken as well as shown.
+- **Mood visuals.** Pip's expression and the header status follow the mode, so the child doesn't need to read them: graduation cap for learning, sparkles for play, a heart for feelings, dots while thinking, sound waves while listening.
+- **One-tap buttons.** Feeling faces (each with a text label) and quick buttons: play, learn, story.
+- **Celebration.** Leveling up shows a celebration with confetti; it respects reduced-motion settings. The client compares levels, so a level-up the server reports late (`analysisPending`) is still celebrated on the next turn.
+- **Friendly errors.** Problems show a kind message with "Try again"; after a rate limit, sending pauses until `Retry-After` has passed. If the connection drops mid-reply, the partial reply is kept and nothing is re-sent, because the server already saved that turn. Only the app's own `child_not_found` or `unauthorized` errors send the parent back to setup; a 401/404 page from a proxy or CDN doesn't.
+
+Both pages load client-only because the session lives in `localStorage` ([lib/client/storage.ts](lib/client/storage.ts)). The tokens are stored on the device, along with the last 40 messages, which are tied to the child's id so they never show up for another profile. Other tabs follow profile changes through `storage` events. Every storage access is guarded, so private mode still works.
+
+The parent corner sits behind a two-digit × one-digit question. After two wrong answers there's a wait that doubles each time (from 30 s up to 5 min) and survives a reload. Deleting a profile also requires typing "delete". This suits a family tablet.
+
 ## How a turn works
 
 ```

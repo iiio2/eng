@@ -1,26 +1,77 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * English Buddy design tokens. Warm, calm and high-contrast for young
+ * children: cream paper, sunshine accents, ink text. Light theme only.
+ */
+@theme {
+  --color-cream: #fff8ec;
+  --color-paper: #ffffff;
+  --color-ink: #2b2a33;
+  --color-ink-soft: #5c5a66;
+  --color-line: #ecdfc8;
+  /* Borders of form controls: 3.8:1 on paper, 3.6:1 on cream (WCAG 1.4.11). */
+  --color-field: #94805c;
+  --color-sun: #ffc845;
+  --color-sun-soft: #ffe7a3;
+  --color-sun-deep: #b97800;
+  --color-coral: #ff7a59;
+  --color-coral-soft: #ffe1d6;
+  --color-sky: #2563a8;
+  --color-sky-soft: #dcebfa;
+  --color-leaf: #1b7a51;
+  --color-leaf-soft: #dcf3e6;
+  --color-alert: #b42318;
+  --color-alert-soft: #fdecea;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-andika), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-bob: bob 3s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 1.4s ease-out infinite;
+  --animate-pop-in: pop-in 0.25s ease-out both;
+  --animate-confetti: confetti 2.6s ease-in forwards;
+
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgb(255 122 89 / 0.55); }
+    100% { box-shadow: 0 0 0 18px rgb(255 122 89 / 0); }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes confetti {
+    from { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    to { transform: translateY(105vh) rotate(540deg); opacity: 0.8; }
   }
 }
 
+:root {
+  color-scheme: light;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-sky);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
